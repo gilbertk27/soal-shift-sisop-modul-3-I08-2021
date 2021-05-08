@@ -10,10 +10,14 @@ int main()
 
 
 	int pipe0[2]; // Used to store two ends of first pipe 
-	int pipe1[3]; // Used to store two ends of second pipe 
-	int pipe2[2]
-	pid_t p; 
-        int status4;
+	int pipe1[2]; // Used to store two ends of second pipe 
+	
+	char *arg2[] = {"sort", "-nrk", "3,3", NULL};
+	char *arg1[] = {"ps", "aux", NULL};
+	char *arg3[] = {"head", "-5", NULL};
+	
+	pid_t p_id1, p_id2; 
+	
 	if (pipe(pipe0)==-1) 
 	{ 
 		fprintf(stderr, "Pipe Failed" ); 
@@ -23,60 +27,61 @@ int main()
 	{ 
 		fprintf(stderr, "Pipe Failed" ); 
 		return 1; 
-	} 
- 	if (pipe(pipe2)==-1) 
-	{ 
-		fprintf(stderr, "Pipe Failed" ); 
-		return 1; 
-	} 
-	p = fork(); 
-	if (p < 0) 
+	}
+	
+	
+	//ps aux | sort -nrk 3,3 | head -5	
+	
+	p_id1 = fork(); 
+	if (p_id1 < 0) 
 	{ 
 		fprintf(stderr, "fork Failed" ); 
 		return 1; 
 	}  
-	else if (p == 0) 
+	
+	if (p_id1 == 0) 
 	{ 
-        dup2(pipe0[1], 1);
+        	p_id2 = fork();
+        	
+        	if (p_id2 == 0) {
+        	close(pipe0[0]);
+        	close(pipe1[1]);
+            	close(pipe1[0]);
+        	
+        	dup2(pipe0[1], STDOUT_FILENO);
+    
+	        close(pipe0[1]);
+	        	
+	        
+        	execv("/usr/bin/ps", arg1);
+		}  
+		else {
+			
+			close(pipe0[1]);
+		        close(pipe1[0]);
+		        
+		        dup2(pipe0[0], STDIN_FILENO);
+		        dup2(pipe1[1], STDOUT_FILENO);
+		        
+		        close(pipe1[1]);
+		        close(pipe0[0]);
 
-        close(pipe0[0]);
-        close(pipe0[1]);
-
-//ps aux | sort -nrk 3,3 | head -5	
-	
-        char *arg1[] = {"ps", "aux", NULL};
-        execv("/bin/ps", arg1);
-	
-	} 
-        else{
-
-        close(pipe1[0]);
-        close(pipe1[1]);
-        close(pipe1[2]);
+		        execv("/usr/bin/sort", arg2);	
+		    }
+	}
 		
-        dup2(pipe0[0], 0);
-        dup2(pipe1[1], 1);
-
-        close(pipe0[0]);
-        close(pipe0[1]);
-
-        char *arg2[] = {"sort", "-nrk", "3,3", NULL};
-        execv("/usr/bin/sort", arg2);
-        
-        }
-        else{
-        
-        close(pipe2[0]);
-        close(pipe2[1]);
+	else {
 		
-        dup2(pipe1[0], 0);
-        dup2(pipe2[1], 1);
+        	close(pipe0[1]);
+        	close(pipe0[0]);
+        			
+        	dup2(pipe1[0], STDIN_FILENO);
+      		//dup2(pipe1[1], STDOUT_FILENO);
+        			
+        	close(pipe1[0]);
+	        close(pipe1[1]);
+		
+        	execv("/usr/bin/head", arg3); 
+       }
+}
 
-        close(pipe1[0]);
-        close(pipe1[1]);
-        close(pipe1[2]);
-
-        char *arg2[] = {"head", "-5", NULL};
-        execv("/usr/bin/head", arg2);
-
-} 
