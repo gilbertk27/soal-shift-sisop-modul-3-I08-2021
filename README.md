@@ -401,17 +401,64 @@ Create a directory in the form of a category from the path inputted with mkdir. 
 Use strcmp to compare the input argument to see if it matches the requested input argument which is -f. Then, pthread_create and pthread_join are generated for each input path. If the file argument successfully categorized the output will Berhasil Dikategorikan, whereas if unsuccessful the output will Sad, gagal :(
 
 #### 3 b. Program may accept -d option to categorize a directory instead. With this option, the user may only input 1 directory as it's arguments, unlike the -f option where the user may input multiple file arguments. The command above will categorize the files in /path/to/directory, the categorization result will be saved in the working directory where the C program is called (categorization result is not located at /path/to/directory).
-
+	
 ##### Explanation 3b
+	 else if(strcmp(argv[1],"-d")==0){
+        if(argc==3){ //bisa menerima 1 path
+            strcpy(dir, argv[2]);
+            
+        }
+    }
+- to Accept argument '-d'. Using strcmp to compare input arguments to whether they match the requested input argument which is -d. Command -d will be executed if you only enter 1 path, then use argc == 3. The path will be stored in a char dir.
+ 
+	 if(!listFilesRecursively(dir)){
+        printf("Yah, gagal disimpan :(\n");
+        exit(0);
+    }
+- The message that is displayed when unsuccessfully executing the command on the -d argument. 
+		if(strcmp(argv[1],"-d")==0) printf("Berhasil disimpan\n");
+- The message that is displayed when successfully executing the command on the -d argument. 
+This message will be displayed when the recursive process to move all contents in the directory path that has been categorized into the current working directory has been successful.
 
 #### 3 c. Other than the above options, this program accepts the * option. This option categorizes all the file in the working directory when the C program is run
-
+	
 ##### Explanation 3c
+	else if(strcmp(argv[1],"*")==0){
+        strcpy(dir,src);
+    }
+- to Accept argument '*'. Using strcmp to compare input arguments to whether they match the requested input argument which is *. The path will be stored in a char dir.
 
 #### 3 d. All files must be moved into a folder. Files without extensions will be moved to a folder named "Unknown". Hidden files will be moved to a folder named "Hidden".
 
 ##### Explanation 3d
+	void cekExt(char* fileName,char *ext){ 
+    char *extt=strchr(fileName,'.'); //kalau ada 2 ext->ambil paling depan
+    if(extt==fileName){
+        strcpy(ext,"Hidden");
+    }
+    else if (extt==NULL){
+        strcpy(ext,"Unknown");
+    }
+    else{
+        strcpy(ext,extt+1);
+        for(int x=0;x<strlen(ext);x++){
+            //ubah jadi lowercase
+            ext[x]=tolower(ext[x]);
+	    }
+	}
+    }
+Hidden files are files that have a prefix. in the file name, so that if the file begins with. it will create a Hidden file category. Then, if the file doesn't have any extensions later it will be categorized as Unknown. For extension names written in uppercase, it can be changed to lowercase using tolower.
 
 #### 3 e. Each file to be categorized will be processed by a thread to make the program run in parallel to make it quicker.
 
 ##### Explanation 3e
+ for(;i<indeks;i++){
+        printf("%s\n",save[i]);
+        pthread_create(&tid2[i],NULL,moveFile,(void *)save[i]);
+    }
+    for(;j<indeks;j++)
+    {
+        void *ptr;
+        pthread_join(tid2[j],&ptr);
+    }
+- Creating threads for the -d and * commands. pthread_create and pthread_join will be created as many categories as you want to create from files in that directory.
