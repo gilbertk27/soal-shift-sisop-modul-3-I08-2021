@@ -318,3 +318,25 @@ else {
 | ![](/Image/soal2/2c.png) |
 |:--:| 
 | *2c pipe IPC result* |
+
+
+### NO 3
+#### 3 a. Program accepts -f option like stated above, with this option the user may add file arguments to be categorized as much as they want. 
+
+##### Explanation 3a
+
+#### 3 b. Program may accept -d option to categorize a directory instead. With this option, the user may only input 1 directory as it's arguments, unlike the -f option where the user may input multiple file arguments. The command above will categorize the files in /path/to/directory, the categorization result will be saved in the working directory where the C program is called (categorization result is not located at /path/to/directory).
+
+##### Explanation 3b
+
+#### 3 c. Other than the above options, this program accepts the * option. This option categorizes all the file in the working directory when the C program is run
+
+##### Explanation 3c
+
+#### 3 d. All files must be moved into a folder. Files without extensions will be moved to a folder named "Unknown". Hidden files will be moved to a folder named "Hidden".
+
+##### Explanation 3d
+
+#### 3 e. Each file to be categorized will be processed by a thread to make the program run in parallel to make it quicker.
+
+##### Explanation 3e
