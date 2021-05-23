@@ -321,9 +321,84 @@ else {
 
 
 ### NO 3
+#### function to check the file type, whether the file is a Regular file or not:
+
+	int isRegular(const char *path){ //cek file/dir
+    struct stat path_stat;
+    stat(path,&path_stat);
+    return S_ISREG(path_stat.st_mode);
+    }
+    
+For this function use a struct stat which contains several elements. To check whether the file is a regular type (not a folder), use one of the struct elements, namely st_mode.
+
+#### moveFile function to categorize files
+	char *ndir,*dir;
+    char x='/'; // home/usr/modul /soal.c
+    char y='.';
+    dir = strrchr(file,x); //yg pertamakali dijumpai
+    ndir = strchr(file, y); 
+    char ext[1000];
+
+strrchr is used to get / separated strings by checking from the back of the string. Meanwhile, strchr is used to get strings separated by signs. by checking from the front string.
+	if (dir){
+        //ngecek file/dir/ada ngga
+        if(checkIfFileExists(file)){
+            cekExt(dir+1,ext);
+        }
+        else{
+            return 0;
+        }
+    }
+
+If the path to be checked is a directory or a file, it will check whether the file path exists with the checkIfFileExists function. If there is, it will separate the extension from the file name with the CekExt function which will be explained in the 3d section.
+
+	 mkdir(ext,0777);//extension dir
+    //src
+    char path[1000];
+    strcpy(path,(char*) argc);
+    //dst
+    char fileCat[1000];
+    getcwd(fileCat,sizeof(path));
+    strcat(fileCat,"/");
+    strcat(fileCat,ext);
+    strcat(fileCat,"/");
+    strcat(fileCat,dir+1);
+    printf("%s\n%s\n",path,fileCat);
+    rename(path,fileCat);
+    
+    return(void *) 1;
+    //moves(src);
+    pthread_exit(0);
+    }
+    
+Create a directory in the form of a category from the path inputted with mkdir. Then, the directory is stored in the current working directory by renaming it to the initial path of that directory.
+
 #### 3 a. Program accepts -f option like stated above, with this option the user may add file arguments to be categorized as much as they want. 
 
 ##### Explanation 3a
+
+	if(strcmp(argv[1],"-f")==0){
+        int i=0;
+        for(int x=2;x<argc;x++){
+            //printf("%s", argv[x]);
+            pthread_create(&tid[i],NULL,moveFile,(void *)argv[x]);
+            i++;
+        }
+        for(int x=0;x<i;x++){
+            void *ptr;
+            pthread_join(tid[x],&ptr);
+            
+            if(((int) ptr)==1){
+                printf("File %d : Berhasil Dikategorikan \n", x+1);
+            }
+            else{
+                printf("File %d : Sad, gagal :( \n",x+1);
+            }
+        }
+        return 0;
+    }
+    
+Use strcmp to compare the input argument to see if it matches the requested input argument which is -f. Then, pthread_create and pthread_join are generated for each input path. If the file argument successfully categorized the output will Berhasil Dikategorikan, whereas if unsuccessful the output will Sad, gagal :(
 
 #### 3 b. Program may accept -d option to categorize a directory instead. With this option, the user may only input 1 directory as it's arguments, unlike the -f option where the user may input multiple file arguments. The command above will categorize the files in /path/to/directory, the categorization result will be saved in the working directory where the C program is called (categorization result is not located at /path/to/directory).
 
