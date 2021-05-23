@@ -340,6 +340,7 @@ For this function use a struct stat which contains several elements. To check wh
     char ext[1000];
 
 strrchr is used to get / separated strings by checking from the back of the string. Meanwhile, strchr is used to get strings separated by signs. by checking from the front string.
+
 	if (dir){
         //ngecek file/dir/ada ngga
         if(checkIfFileExists(file)){
@@ -373,6 +374,82 @@ If the path to be checked is a directory or a file, it will check whether the fi
     
 Create a directory in the form of a category from the path inputted with mkdir. Then, the directory is stored in the current working directory by renaming it to the initial path of that directory.
 
+#### to check the file exists
+	int checkIfFileExists(const char * filename)
+	{
+	    FILE *file;
+	    file = fopen(filename, "rb");
+	    if (file!=NULL)
+	    {
+		printf("%s\n",filename);
+		fclose(file);
+		if(isRegular(filename)) return 1; //cek file
+		else return 0;
+	    }
+
+	    return 0;
+	}
+#### to check extension
+	void cekExt(char* fileName,char *ext){ 
+    char *extt=strchr(fileName,'.'); //kalau ada 2 ext->ambil paling depan
+    if(extt==fileName){
+        strcpy(ext,"Hidden");
+    }
+    else if (extt==NULL){
+        strcpy(ext,"Unknown");
+    }
+    else{
+        strcpy(ext,extt+1);
+        for(int x=0;x<strlen(ext);x++){
+            //ubah jadi lowercase
+            ext[x]=tolower(ext[x]);
+	    }
+	}
+    }
+    
+- The default case (of looping when separating strings with the delimiter ".") Is categorizing files according to the extension where "." Occurs. only once (for example: the get.sh file will be categorized to a folder named sh).
+- The first case is to categorize hidden files so that they can enter the hidden folder. If there is a "." in the first index (which indicates file-, fileExt (which will store the folder name) will store "hidden" so that a "hidden" folder will be created for hidden files.
+- The second case is if there is no extension (count less than 1), so fileExt will save "unknown" so that an "unknown" folder will be created for files without extension.
+- The third case is when the "." more than 1 (count is more than equal to 3 because it is counted as many tokens not "."). If the extension is more than 1, will enter the folder with the leading point. fileExt will store the value in step 2, and create a folder according to the string obtained in step 2.
+
+#### For a number 3b, and 3c also use the same function that is to do a listing files recursively.
+	int listFilesRecursively(char *basePath)
+	{
+	    char path[1000];
+	    struct dirent *dp;
+	    DIR *dir = opendir(basePath);
+
+    if (!dir)
+        return 0;
+
+    while ((dp = readdir(dir)) != NULL)
+    {
+        if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
+        {
+            char destDir[1000];
+            strcpy(destDir,basePath);
+            strcat(destDir,"/");
+            strcat(destDir,dp->d_name);
+            printf("%s\n",destDir);
+           
+            if(checkIfFileExists(destDir)){
+                strcpy(save[indeks],destDir);
+                indeks+=1;
+            }
+            // Construct new path from our base path
+            strcpy(path, basePath);
+            strcat(path, "/");
+            strcat(path, dp->d_name);
+
+            listFilesRecursively(path);
+        }
+    }
+
+    closedir(dir);
+    return 1;
+    }
+
+
 #### 3 a. Program accepts -f option like stated above, with this option the user may add file arguments to be categorized as much as they want. 
 
 ##### Explanation 3a
@@ -398,7 +475,7 @@ Create a directory in the form of a category from the path inputted with mkdir. 
         return 0;
     }
     
-Use strcmp to compare the input argument to see if it matches the requested input argument which is -f. Then, pthread_create and pthread_join are generated for each input path. If the file argument successfully categorized the output will Berhasil Dikategorikan, whereas if unsuccessful the output will Sad, gagal :(
+To see if it matches the requested input argument which is -f use strcmp to compare the input argument. Then, pthread_create and pthread_join are generated for each input path. If the file argument successfully categorized the output will Berhasil Dikategorikan, whereas if unsuccessful the output will Sad, gagal :(
 
 #### 3 b. Program may accept -d option to categorize a directory instead. With this option, the user may only input 1 directory as it's arguments, unlike the -f option where the user may input multiple file arguments. The command above will categorize the files in /path/to/directory, the categorization result will be saved in the working directory where the C program is called (categorization result is not located at /path/to/directory).
 	
@@ -449,6 +526,7 @@ This message will be displayed when the recursive process to move all contents i
 	    }
 	}
     }
+    
 Hidden files are files that have a prefix. in the file name, so that if the file begins with. it will create a Hidden file category. Then, if the file doesn't have any extensions later it will be categorized as Unknown. For extension names written in uppercase, it can be changed to lowercase using tolower.
 
 #### 3 e. Each file to be categorized will be processed by a thread to make the program run in parallel to make it quicker.
