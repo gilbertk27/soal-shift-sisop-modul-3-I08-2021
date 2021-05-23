@@ -242,8 +242,6 @@ Below is code for the factorial function with condition according to the problem
 
 ##### Explanation 2c
 
-Disini, untuk membuat program tersebut, kami menggunakan 2 pipe with 2 fork. Pembuatan pipe dapat dilakukan with fungsi **pipe()**. Apabila fork pertama **p_id1** and fork kedua **p_id2** berhasil dilakukan and child process berhasil dibuat **p_id1 == 0 & p_id2 == 0**, maka pipe pertama fd1[1]akan diduplikasi menjadi file deskriptor dari stdout, lalu pipe pertama tersebut fd1 akan ditutup and program akan mengeksekusi command **ps aux**.
-
 To create the program, we use 2 pipe and 2 fork. The creation of pope done with pipe() function. If the first fork **p_id1** and second fork **p_id2** successfully done and child process also successfully created (**p_id1 == 0 & p_id2 == 0**), The first pipe **pipe0[0]** will be duplicated into file descriptor from stdout, and then first pipe will be closed and program will execute command **ps aux**.
 
 ```
