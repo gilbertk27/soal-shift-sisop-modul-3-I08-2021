@@ -547,14 +547,30 @@ Hidden files are files that have a prefix. in the file name, so that if the file
 - Time constraint to solve the problem during ETS.
 
 #### Result Image:
-| ![](/Image/soal2/2a.png) |
+| ![](/Image/soal3/3a.png) |
 |:--:| 
-| *2a calculation result* |
+| *3a result* |
 
-| ![](/Image/soal2/2b.png) |
+| ![](/Image/soal3/3ac.png) |
 |:--:| 
-| *2b calculation result* |
+| *3ac result* |
 
-| ![](/Image/soal2/2c.png) |
+| ![](/Image/soal3/3b.png) |
 |:--:| 
-| *2c pipe IPC result* |
+| *3b result* |
+
+| ![](/Image/soal3/3ccek.png) |
+|:--:| 
+| *3ccek result* |
+
+| ![](/Image/soal3/3ccekhiden.png) |
+|:--:| 
+| *3ccekhiden result* |
+
+| ![](/Image/soal3/3dUnknown.png) |
+|:--:| 
+| *3d result* |
+
+| ![](/Image/soal3/3dhidden.png) |
+|:--:| 
+| *3dhidden result* |
