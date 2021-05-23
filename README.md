@@ -452,13 +452,13 @@ Hidden files are files that have a prefix. in the file name, so that if the file
 #### 3 e. Each file to be categorized will be processed by a thread to make the program run in parallel to make it quicker.
 
 ##### Explanation 3e
- for(;i<indeks;i++){
-        printf("%s\n",save[i]);
-        pthread_create(&tid2[i],NULL,moveFile,(void *)save[i]);
-    }
-    for(;j<indeks;j++)
-    {
-        void *ptr;
-        pthread_join(tid2[j],&ptr);
-    }
+	 for(;i<indeks;i++){
+		printf("%s\n",save[i]);
+		pthread_create(&tid2[i],NULL,moveFile,(void *)save[i]);
+	    }
+	    for(;j<indeks;j++)
+	    {
+		void *ptr;
+		pthread_join(tid2[j],&ptr);
+	    }
 - Creating threads for the -d and * commands. pthread_create and pthread_join will be created as many categories as you want to create from files in that directory.
