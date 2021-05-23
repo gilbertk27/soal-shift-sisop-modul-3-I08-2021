@@ -411,12 +411,14 @@ Use strcmp to compare the input argument to see if it matches the requested inpu
     }
 - to Accept argument '-d'. Using strcmp to compare input arguments to whether they match the requested input argument which is -d. Command -d will be executed if you only enter 1 path, then use argc == 3. The path will be stored in a char dir.
  
-	 if(!listFilesRecursively(dir)){
-        printf("Yah, gagal disimpan :(\n");
-        exit(0);
-    }
+		 if(!listFilesRecursively(dir)){
+		printf("Yah, gagal disimpan :(\n");
+		exit(0);
+	    }
 - The message that is displayed when unsuccessfully executing the command on the -d argument. 
+	
 		if(strcmp(argv[1],"-d")==0) printf("Berhasil disimpan\n");
+		
 - The message that is displayed when successfully executing the command on the -d argument. 
 This message will be displayed when the recursive process to move all contents in the directory path that has been categorized into the current working directory has been successful.
 
