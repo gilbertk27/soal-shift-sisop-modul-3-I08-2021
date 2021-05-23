@@ -542,3 +542,19 @@ Hidden files are files that have a prefix. in the file name, so that if the file
 		pthread_join(tid2[j],&ptr);
 	    }
 - Creating threads for the -d and * commands. pthread_create and pthread_join will be created as many categories as you want to create from files in that directory.
+
+##### Problem encountered
+- Time constraint to solve the problem during ETS.
+
+#### Result Image:
+| ![](/Image/soal2/2a.png) |
+|:--:| 
+| *2a calculation result* |
+
+| ![](/Image/soal2/2b.png) |
+|:--:| 
+| *2b calculation result* |
+
+| ![](/Image/soal2/2c.png) |
+|:--:| 
+| *2c pipe IPC result* |
